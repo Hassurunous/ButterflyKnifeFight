@@ -7,23 +7,29 @@ public class ButterflyControlsv031 : MonoBehaviour {
 
 	private enum ControlsState {LoadingControls, Ready};
 	private ControlsState currentState;
-
-	float wingThrust = 10.0f;
 	private Rigidbody rb;
 	private float timeFire1Pressed;
 	private float timeFire2Pressed;
-	public Vector3 movementSpeed = new Vector3(0.0f, 1.0f, 0.0f);
-	public float movementXSpeed = 0.0f;
-	public float movementYSpeed;
-	public float movementZSpeed;
-	float gravity = 40.0f;
-	//	bool addForce = false;
+	private float wingThrust = 10.0f;
+	private float gravity = 40.0f;
 	private bool L_isAxisInUse = false;
 	private bool R_isAxisInUse = false;
 	private bool both_flap_active = false;
 	private bool is_Landed = false;
 	private Vector3 rb_velocity;
 	private Vector3 offset;
+	private float lift = 0.0f;
+	private GameController gameController;
+	Animator flapWingsAnim;
+	int flapBothHash = Animator.StringToHash ("BothFlap");
+	int flapLeftHash = Animator.StringToHash ("LeftFlap");
+	int flapRightHash = Animator.StringToHash ("RightFlap");
+	private bool flapWingsBool = false;
+
+	public Vector3 movementSpeed = new Vector3(0.0f, 1.0f, 0.0f);
+	public float movementXSpeed = 0.0f;
+	public float movementYSpeed;
+	public float movementZSpeed;
 	public float bias = 0.85f;
 	public float followDistance = 10.0f;
 	public float followHeight = 2.0f;
@@ -34,14 +40,9 @@ public class ButterflyControlsv031 : MonoBehaviour {
 	public int killCount = 0;
 	public bool killMsgActive = false;
 	public float killTime = 0.0f;
-	private float lift = 0.0f;
 	public GameObject knife;
-	Animator flapWingsAnim;
-	int flapBothHash = Animator.StringToHash ("BothFlap");
-	int flapLeftHash = Animator.StringToHash ("LeftFlap");
-	int flapRightHash = Animator.StringToHash ("RightFlap");
 	public Text warningMsg;
-	private GameController gameController;
+
 
 	public string horizontalAxis;
 	public string verticalAxis;
@@ -77,50 +78,35 @@ public class ButterflyControlsv031 : MonoBehaviour {
 		case ControlsState.Ready:
 			rb = GetComponent<Rigidbody> ();
 
-			//		movementXSpeed = movementSpeed.x;
 			movementYSpeed = movementSpeed.y;
 			movementZSpeed = movementSpeed.z;
-
-			// Speed limiters to prevent butterflies from flying too fast to control
-
-			//		// Camera should remain relatively stable when following.
-			//		// Using moveCameTo and bias, we move the camera smoothly to track butterfly in flight
-			//		Vector3 moveCamTo = transform.position + Vector3.up * 10.0f + -transform.forward * 20.0f;
-			//		float bias = 0.98f;
-			//		Camera.main.transform.position = Camera.main.transform.position * bias + moveCamTo * (1.0f - bias);
-			//		Camera.main.transform.LookAt( transform.position + transform.forward * 3.0f );
 
 			// Control Mapping
 			// Which wing(s) to flap
 			if ((Input.GetAxis (flapLAxis) > 0 || Input.GetButtonDown (flapLAxis))) {
 				if (L_isAxisInUse == false) {
 					timeFire1Pressed = Time.time;
-					flapWings ();
-					//				L_isAxisInUse = true;
+//					flapWings ();
+					flapWingsBool = true;
 				}
 			}
 			if (Input.GetAxisRaw (flapLAxis) <= 0) {
-				//			print ("FlapL == " + Input.GetAxisRaw("FlapL"));
 				L_isAxisInUse = false;
 				both_flap_active = false;
 			}    
 			if (Input.GetAxis (flapRAxis) > 0 || Input.GetButtonDown (flapRAxis)) {
-				//	print ("FlapR == " + Input.GetAxisRaw("FlapR"));
 				if (R_isAxisInUse == false) {
 					timeFire2Pressed = Time.time;
-					flapWings ();
-					//				R_isAxisInUse = true;
+//					flapWings ();
+					flapWingsBool = true;
 				}
 			}
 			if (Input.GetAxisRaw (flapRAxis) <= 0) {
-				//			print ("FlapR == " + Input.GetAxisRaw("FlapR"));
 				R_isAxisInUse = false;
 				both_flap_active = false;
 			} 
 
 			if (Input.GetButtonDown (bombsAwayAxis)) {
-//				print("Bomb's away!");
-				//			gameObject.transform.GetChild(2).gameObject.SetActive(false);
 				foreach (Transform child in transform)
 					if (child.CompareTag ("Knife")) {
 						if (child.gameObject.activeSelf == true) {
@@ -132,44 +118,31 @@ public class ButterflyControlsv031 : MonoBehaviour {
 					}
 			}
 
+
 			if (Input.GetButtonDown (pauseButton)) {
 				print ("Pause pressed");
 				gameController.gamePaused = !gameController.gamePaused;
 				print (gameController.gamePaused);
 			}
-
-
+				
 
 			if (killMsgActive) {
 				if (Time.time > killTime + 2.0f) {
 					warningMsg.text = "";
 				}
 			}
-			//		if ((Input.GetButton ("FlapL") && Input.GetButton ("FlapR")) || (Input.GetAxis("FlapL") > 0 && Input.GetAxis("FlapR") > 0)) {
-			//			Gliding ();
-			//		} else {
-			//			Gliding ();
-			//		}
-
-
+				
 			break;
+		}
+
+		if (flapWingsBool == true) {
+			flapWings ();
+			flapWingsBool = false;
 		}
 	}
 
 	void FixedUpdate() {
-		//Glide
 		Gliding ();
-	}
-
-	void LateUpdate() {
-		
-		//		float desiredAngle = transform.eulerAngles.y;
-		//		Quaternion rotation = Quaternion.Euler(0, desiredAngle, 0);
-		//		Camera.main.transform.position = transform.position - (rotation * offset);
-		//		Camera.main.transform.LookAt( transform.position + transform.forward * 3.0f );
-		// Camera should remain relatively stable when following.
-		// Using moveCameTo and bias, we move the camera smoothly to track butterfly in flight
-		//		Vector3 moveCamTo = transform.position + transform.up * 5.0f + -transform.forward * 10.0f;
 
 	}
 
@@ -179,10 +152,11 @@ public class ButterflyControlsv031 : MonoBehaviour {
 		//		rb.AddForce(transform.right * wingThrust / 2);
 		//		movementXSpeed += wingThrust / 10;
 		//		transform.position += transform.right * Time.deltaTime * movementXSpeed;
-		iTween.RotateBy (gameObject, iTween.Hash (
-			"z", -0.01,
-			"time", 0.01f,
-			"easeType", "easeOutQuad"));
+//		iTween.RotateBy (gameObject, iTween.Hash (
+//			"z", -0.01,
+//			"time", 0.01f,
+//			"easeType", "easeOutQuad"));
+		transform.Rotate (transform.forward, -Time.fixedDeltaTime * 20, Space.World);
 		flapWingsAnim.SetTrigger(flapLeftHash);
 	}
 
@@ -192,10 +166,11 @@ public class ButterflyControlsv031 : MonoBehaviour {
 		//		rb.AddForce(-transform.right * wingThrust / 2 );
 		//		movementXSpeed -= wingThrust / 10;
 		//		transform.position += transform.right * Time.deltaTime * movementXSpeed;
-		iTween.RotateBy (gameObject, iTween.Hash (
-			"z", 0.01,
-			"time", 0.01f,
-			"easeType", "easeOutQuad"));
+//		iTween.RotateBy (gameObject, iTween.Hash (
+//			"z", 0.01,
+//			"time", 0.01f,
+//			"easeType", "easeOutQuad"));
+		transform.Rotate (transform.forward, Time.fixedDeltaTime * 20, Space.World);
 		flapWingsAnim.SetTrigger(flapRightHash);
 	}
 
