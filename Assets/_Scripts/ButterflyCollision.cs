@@ -95,6 +95,7 @@ public class ButterflyCollision : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider target) {
+		print ("Butterfly collided with " + target.gameObject.name);
 		if (target.gameObject.tag.Equals ("BattleZone") == true) {
 			outCollision = false;
 			warningMsg.text = "";
@@ -120,7 +121,7 @@ public class ButterflyCollision : MonoBehaviour {
 //			print ("Ground collision");
 		} 
 		else if (target.gameObject.tag.Equals ("Knife Handle") == true) {
-//			print ("Knife Handle");
+			print ("Knife Handle");
 			foreach (Transform child in parentPrefab.transform) {
 				if (child.CompareTag ("Knife")) {
 					if (child.gameObject.activeSelf == false) {

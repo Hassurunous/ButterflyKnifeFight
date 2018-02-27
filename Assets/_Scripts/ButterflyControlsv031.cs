@@ -107,15 +107,8 @@ public class ButterflyControlsv031 : MonoBehaviour {
 			} 
 
 			if (Input.GetButtonDown (bombsAwayAxis)) {
-				foreach (Transform child in transform)
-					if (child.CompareTag ("Knife")) {
-						if (child.gameObject.activeSelf == true) {
-							GameObject knifeClone = Instantiate (knife, transform.position - transform.up * 5.0f, transform.rotation * Quaternion.Euler (0, 90, 0));
-							knifeClone.GetComponent<Rigidbody> ().velocity = transform.forward * movementZSpeed * 3f + transform.forward * 100.0f;
-							knifeClone.GetComponent<knifeDecay> ().lastOwner = gameObject;
-							child.gameObject.SetActive (false);
-						}
-					}
+				BombsAway ();
+
 			}
 
 
@@ -134,11 +127,6 @@ public class ButterflyControlsv031 : MonoBehaviour {
 				
 			break;
 		}
-
-		if (flapWingsBool == true) {
-			flapWings ();
-			flapWingsBool = false;
-		}
 	}
 
 	void FixedUpdate() {
@@ -156,7 +144,7 @@ public class ButterflyControlsv031 : MonoBehaviour {
 //			"z", -0.01,
 //			"time", 0.01f,
 //			"easeType", "easeOutQuad"));
-		transform.Rotate (transform.forward, -Time.fixedDeltaTime * 20, Space.World);
+		transform.Rotate (transform.forward, -Time.fixedDeltaTime * 100, Space.World);
 		flapWingsAnim.SetTrigger(flapLeftHash);
 	}
 
@@ -170,7 +158,7 @@ public class ButterflyControlsv031 : MonoBehaviour {
 //			"z", 0.01,
 //			"time", 0.01f,
 //			"easeType", "easeOutQuad"));
-		transform.Rotate (transform.forward, Time.fixedDeltaTime * 20, Space.World);
+		transform.Rotate (transform.forward, Time.fixedDeltaTime * 100, Space.World);
 		flapWingsAnim.SetTrigger(flapRightHash);
 	}
 
@@ -212,6 +200,11 @@ public class ButterflyControlsv031 : MonoBehaviour {
 		rb = GetComponent<Rigidbody> ();
 		rb.angularVelocity = Vector3.zero;
 
+		// Flap wings
+		if (flapWingsBool == true) {
+			flapWings ();
+			flapWingsBool = false;
+		}
 
 		//Glider Transcription
 		//https://www.youtube.com/watch?v=_UvQGfddNFY
@@ -220,10 +213,10 @@ public class ButterflyControlsv031 : MonoBehaviour {
 		float tilt = Input.GetAxis(verticalAxis) * 12;
 		float yaw = Input.GetAxis (horizontalAxis) * 8;
 
-
-		if ((Input.GetButton (flapLAxis) && Input.GetButton (flapRAxis)) || (Input.GetAxis(flapLAxis) > 0 && Input.GetAxis(flapRAxis) > 0)) {
-			movementZSpeed -= 10.0f * Time.deltaTime;
-		} 
+		//What is the purpose of these lines?
+//		if ((Input.GetButton (flapLAxis) && Input.GetButton (flapRAxis)) || (Input.GetAxis(flapLAxis) > 0 && Input.GetAxis(flapRAxis) > 0)) {
+//			movementZSpeed -= 10.0f * Time.deltaTime;
+//		} 
 
 
 		if (tilt != 0) {
@@ -237,7 +230,6 @@ public class ButterflyControlsv031 : MonoBehaviour {
 
 		// Stop butterfly movement if it lands on the ground.
 		float terrainHeightPlaneLocale = Terrain.activeTerrain.SampleHeight (transform.position);
-		// print(terrainHeightPlaneLocale + " + " + transform.position.y);
 
 		if (terrainHeightPlaneLocale + 3 >= transform.position.y && !is_Landed) {
 			movementSpeed.x = 0.0f;
@@ -251,17 +243,13 @@ public class ButterflyControlsv031 : MonoBehaviour {
 				//				print ("is_Landed = " + is_Landed);
 			}
 			if (terrainHeightPlaneLocale + 3 < transform.position.y) {
-				//				transform.position -= Vector3.up * gravity * Time.deltaTime;
 				movementSpeed -= transform.InverseTransformDirection(Vector3.up) * gravity * Time.deltaTime;
 				lift = transform.TransformDirection (transform.up).y * (movementZSpeed / 150);
-				//				print ("lift = " + lift);
 				if (movementSpeed.y < 50.0f) {
 					movementSpeed.y += lift * gravity * Time.deltaTime;
 				}
-
-				//				movementSpeed -= transform.InverseTransformDirection(Vector3.up) * gravity * Time.deltaTime - (transform.InverseTransformDirection(Vector3.up) * gravity * Time.deltaTime) * (movementZSpeed / 100);
 			}
-			rb.MovePosition(transform.position + (transform.up * movementSpeed.y * Time.deltaTime) + (transform.forward * movementSpeed.z * Time.deltaTime) + (transform.right * movementXSpeed * Time.deltaTime));
+			rb.MovePosition(transform.position + (transform.up * movementSpeed.y * Time.fixedDeltaTime) + (transform.forward * movementSpeed.z * Time.fixedDeltaTime) + (transform.right * movementXSpeed * Time.fixedDeltaTime));
 
 //			transform.position += transform.up * movementSpeed.y * Time.deltaTime;
 //			transform.position += transform.forward * Time.deltaTime * movementSpeed.z;
@@ -273,5 +261,17 @@ public class ButterflyControlsv031 : MonoBehaviour {
 		}
 
 		//		transform.Rotate (roll / 3, -yaw, -tilt / 3);
+	}
+
+	void BombsAway() {
+		foreach (Transform child in transform)
+			if (child.CompareTag ("Knife")) {
+				if (child.gameObject.activeSelf == true) {
+					GameObject knifeClone = Instantiate (knife, transform.position - transform.up * 5.0f, transform.rotation * Quaternion.Euler (0, 90, 0));
+					knifeClone.GetComponent<Rigidbody> ().velocity = transform.forward * movementZSpeed * 3f + transform.forward * 100.0f;
+					knifeClone.GetComponent<knifeDecay> ().lastOwner = gameObject;
+					child.gameObject.SetActive (false);
+				}
+			}
 	}
 }
