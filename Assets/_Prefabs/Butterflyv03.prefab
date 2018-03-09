@@ -1471,7 +1471,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 8192
-  skinWidth: 1
+  skinWidth: 0.1
 --- !u!114 &114513134657043068
 MonoBehaviour:
   m_ObjectHideFlags: 1

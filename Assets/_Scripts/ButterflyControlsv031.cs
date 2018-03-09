@@ -27,16 +27,12 @@ public class ButterflyControlsv031 : MonoBehaviour {
 	private bool flapWingsBool = false;
 
 	public Vector3 movementSpeed = new Vector3(0.0f, 1.0f, 0.0f);
+	public Vector3 maxVelocities = new Vector3(0f, 50.0f, 400.0f);
 	public float movementXSpeed = 0.0f;
 	public float movementYSpeed;
 	public float movementZSpeed;
-//	public float bias = 0.85f;
-//	public float followDistance = 10.0f;
-//	public float followHeight = 2.0f;
-//	public float cameraVertOffsetMax = 10.0f;
-//	public float cameraVertOffsetMin = 5.0f;
-//	public float cameraFollowOffsetMax = 40.0f;
-//	public float cameraFollowOffsetMin = 20.0f;
+
+
 	public int killCount = 0;
 	public bool killMsgActive = false;
 	public float killTime = 0.0f;
@@ -51,6 +47,13 @@ public class ButterflyControlsv031 : MonoBehaviour {
 	public string bombsAwayAxis;
 	public string pauseButton;
 
+	public float flapRotationStrength = 1.5f;
+
+	Quaternion center;
+
+	// Clamp rotation while on the ground.
+	Vector3 groundRotationClamp = new Vector3(45.0f, 0, 45.0f);
+
 	// Use this for initialization
 	void Awake () {	
 		//		print ("ButterflyControls.cs loaded on " + gameObject.name);
@@ -64,11 +67,12 @@ public class ButterflyControlsv031 : MonoBehaviour {
 			if (child.CompareTag ("Butterfly")) {
 				flapWingsAnim = child.GetComponent<Animator> ();
 			}
+		gameController = GameObject.Find ("Game Controller").gameObject.GetComponent<GameController> ();
+		center = transform.rotation;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		gameController = GameObject.Find ("Game Controller").gameObject.GetComponent<GameController> ();
 		switch (currentState) {
 		case ControlsState.LoadingControls:
 			if (horizontalAxis != "" && verticalAxis != "" && flapLAxis != "" && flapRAxis != "" && bombsAwayAxis != "") {
@@ -86,7 +90,6 @@ public class ButterflyControlsv031 : MonoBehaviour {
 			if ((Input.GetAxis (flapLAxis) > 0 || Input.GetButtonDown (flapLAxis))) {
 				if (L_isAxisInUse == false) {
 					timeFire1Pressed = Time.time;
-//					flapWings ();
 					flapWingsBool = true;
 				}
 			}
@@ -97,7 +100,6 @@ public class ButterflyControlsv031 : MonoBehaviour {
 			if (Input.GetAxis (flapRAxis) > 0 || Input.GetButtonDown (flapRAxis)) {
 				if (R_isAxisInUse == false) {
 					timeFire2Pressed = Time.time;
-//					flapWings ();
 					flapWingsBool = true;
 				}
 			}
@@ -118,7 +120,6 @@ public class ButterflyControlsv031 : MonoBehaviour {
 				print (gameController.gamePaused);
 			}
 				
-
 			if (killMsgActive) {
 				if (Time.time > killTime + 2.0f) {
 					warningMsg.text = "";
@@ -131,35 +132,71 @@ public class ButterflyControlsv031 : MonoBehaviour {
 
 	void FixedUpdate() {
 		Gliding ();
+	}
 
+	void LateUpdate() {
+		// This clamps the X and Z rotation of the butterflies while they are "is_Landed"
+		if (is_Landed) {
+			Vector3 currentRotation = transform.localRotation.eulerAngles;
+			if (!(currentRotation.x >= 315f && currentRotation.x <= 360f) && !(currentRotation.x >= 0f && currentRotation.x <= 45f )) {
+				if (currentRotation.x > 180) {
+					currentRotation.x = Mathf.Clamp (currentRotation.x, 315, 360);
+				} else if (currentRotation.x < 180) {
+					currentRotation.x = Mathf.Clamp (currentRotation.x, 0, 45);
+				}
+			}
+			if (!(currentRotation.z >= 315f && currentRotation.z <= 360f) && !(currentRotation.z >= 0f && currentRotation.z <= 45f )) {
+				if (currentRotation.z > 180) {
+					currentRotation.z = Mathf.Clamp (currentRotation.z, 315, 360);
+				} else if (currentRotation.x < 180) {
+					currentRotation.z = Mathf.Clamp (currentRotation.z, 0, 45);
+				}
+			}
+			transform.localRotation = Quaternion.Euler (currentRotation);
+		}
 	}
 
 	public void LeftFlap() {
-		//rb = GetComponent<Rigidbody> ();
-		//		rb.AddForce (transform.forward * wingThrust / 6 + transform.up * wingThrust / 6 + transform.right * wingThrust);
-		//		rb.AddForce(transform.right * wingThrust / 2);
-		//		movementXSpeed += wingThrust / 10;
-		//		transform.position += transform.right * Time.deltaTime * movementXSpeed;
-//		iTween.RotateBy (gameObject, iTween.Hash (
-//			"z", -0.01,
-//			"time", 0.01f,
-//			"easeType", "easeOutQuad"));
-		transform.Rotate (transform.forward, -Time.fixedDeltaTime * 100, Space.World);
-		flapWingsAnim.SetTrigger(flapLeftHash);
+
+		transform.Rotate (transform.forward, -flapRotationStrength, Space.World);
+		flapWingsAnim.SetTrigger (flapLeftHash);
+
+//		Quaternion zQuaternion = Quaternion.AngleAxis(-flapRotationStrength, transform.forward);
+//		Quaternion temp = transform.localRotation * zQuaternion;
+//
+//		// If the butterfly is on the ground, clamp its rotation. 
+//		if (!is_Landed) {
+//			transform.localRotation = temp;
+//			flapWingsAnim.SetTrigger (flapLeftHash);
+//		} else if (Quaternion.Angle (center, temp) <= 45.0f) {
+//			transform.localRotation = temp;
+//			flapWingsAnim.SetTrigger (flapLeftHash);
+//		} else {
+//			transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.identity, Time.deltaTime);
+//			flapWingsAnim.SetTrigger (flapRightHash);
+//		}
+
 	}
 
 	public void RightFlap() {
-		//rb = GetComponent<Rigidbody> ();
-		//		rb.AddForce (transform.forward * wingThrust / 6 + transform.up * wingThrust / 6 + -transform.right * wingThrust);
-		//		rb.AddForce(-transform.right * wingThrust / 2 );
-		//		movementXSpeed -= wingThrust / 10;
-		//		transform.position += transform.right * Time.deltaTime * movementXSpeed;
-//		iTween.RotateBy (gameObject, iTween.Hash (
-//			"z", 0.01,
-//			"time", 0.01f,
-//			"easeType", "easeOutQuad"));
-		transform.Rotate (transform.forward, Time.fixedDeltaTime * 100, Space.World);
-		flapWingsAnim.SetTrigger(flapRightHash);
+
+		transform.Rotate (transform.forward, flapRotationStrength, Space.World);
+		flapWingsAnim.SetTrigger (flapRightHash);
+
+//		Quaternion zQuaternion = Quaternion.AngleAxis(flapRotationStrength, transform.forward);
+//		Quaternion temp = transform.localRotation * zQuaternion;
+//
+//		// If the butterfly is on the ground, clamp its rotation. 
+//		if (!is_Landed) {
+//			transform.localRotation = temp;
+//			flapWingsAnim.SetTrigger (flapRightHash);
+//		} else if (Quaternion.Angle (center, temp) >= -45.0) {
+//			transform.localRotation = temp;
+//			flapWingsAnim.SetTrigger (flapRightHash);
+//		} else {
+//			transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.identity, Time.deltaTime);
+//			flapWingsAnim.SetTrigger (flapLeftHash);
+//		}
 	}
 
 	public void BothFlap() {
@@ -168,10 +205,10 @@ public class ButterflyControlsv031 : MonoBehaviour {
 		//		rb.AddForce (transform.forward * wingThrust / 2 + transform.up * wingThrust);
 		if (both_flap_active == false) {
 
-			if (movementSpeed.z < 400.0f) {
+			if (movementSpeed.z < maxVelocities.z) {
 				movementSpeed.z += wingThrust / 2;
 			}
-			if (movementSpeed.y < 50.0f) {
+			if (movementSpeed.y < maxVelocities.y) {
 				movementSpeed.y += wingThrust / 2;
 			}
 
@@ -218,7 +255,6 @@ public class ButterflyControlsv031 : MonoBehaviour {
 //			movementZSpeed -= 10.0f * Time.deltaTime;
 //		} 
 
-
 		if (tilt != 0) {
 			transform.Rotate (transform.right, tilt * Time.deltaTime * 10, Space.World);
 		}
@@ -226,19 +262,22 @@ public class ButterflyControlsv031 : MonoBehaviour {
 			transform.Rotate (transform.up, yaw * Time.deltaTime * 10, Space.World);
 		}
 
+
 		//End Glider Transcription
 
 		// Stop butterfly movement if it lands on the ground.
 		float terrainHeightPlaneLocale = Terrain.activeTerrain.SampleHeight (transform.position);
 
 		if (terrainHeightPlaneLocale + 3 >= transform.position.y && !is_Landed) {
+			maxVelocities.z = 5.0f;
 			movementSpeed.x = 0.0f;
 			movementSpeed.z = 0.0f;
 			movementSpeed.y = 0.0f;
 			is_Landed = true;
-			print (this.gameObject.name + " is_Landed = " + is_Landed);
 		} else {
 			if (is_Landed == true && terrainHeightPlaneLocale + 5 <= transform.position.y) {
+				maxVelocities.z = 400.0f;
+				maxVelocities.y = 50.0f;
 				is_Landed = false;
 				print (this.gameObject.name + " is_Landed = " + is_Landed);
 			}
@@ -250,13 +289,14 @@ public class ButterflyControlsv031 : MonoBehaviour {
 				}
 			}
 			rb.MovePosition(transform.position + (transform.up * movementSpeed.y * Time.fixedDeltaTime) + (transform.forward * movementSpeed.z * Time.fixedDeltaTime) + (transform.right * movementXSpeed * Time.fixedDeltaTime));
+			if (rb.position.y < 1) {
+				rb.position = new Vector3 (rb.position.x, 1, rb.position.z);
+			}
 
 			// Yaw based on how we're rolled.
 			float tip = (transform.right + Vector3.up).magnitude - 1.414214f;
 			yaw -= tip;
 		}
-
-		//		transform.Rotate (roll / 3, -yaw, -tilt / 3);
 	}
 
 	void BombsAway() {
