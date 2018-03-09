@@ -27,7 +27,7 @@ public class ButterflyCollision : MonoBehaviour {
 //		print ("warningMsgName = " + warningMsgName);
 
 		UICanvas = GameObject.FindGameObjectWithTag("Overlay Canvas");
-		print ("UICanvas = " + UICanvas);
+//		print ("UICanvas = " + UICanvas);
 		switch (GlobalController.numberOfPlayers) {
 		case 2:
 //			print ("Find Warning Message = " + UICanvas.transform.GetChild (0).transform.Find (warningMsgName));
