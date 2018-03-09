@@ -30,13 +30,13 @@ public class ButterflyControlsv031 : MonoBehaviour {
 	public float movementXSpeed = 0.0f;
 	public float movementYSpeed;
 	public float movementZSpeed;
-	public float bias = 0.85f;
-	public float followDistance = 10.0f;
-	public float followHeight = 2.0f;
-	public float cameraVertOffsetMax = 10.0f;
-	public float cameraVertOffsetMin = 5.0f;
-	public float cameraFollowOffsetMax = 40.0f;
-	public float cameraFollowOffsetMin = 20.0f;
+//	public float bias = 0.85f;
+//	public float followDistance = 10.0f;
+//	public float followHeight = 2.0f;
+//	public float cameraVertOffsetMax = 10.0f;
+//	public float cameraVertOffsetMin = 5.0f;
+//	public float cameraFollowOffsetMax = 40.0f;
+//	public float cameraFollowOffsetMin = 20.0f;
 	public int killCount = 0;
 	public bool killMsgActive = false;
 	public float killTime = 0.0f;
@@ -169,10 +169,10 @@ public class ButterflyControlsv031 : MonoBehaviour {
 		if (both_flap_active == false) {
 
 			if (movementSpeed.z < 400.0f) {
-				movementSpeed.z += wingThrust / 4;
+				movementSpeed.z += wingThrust / 2;
 			}
 			if (movementSpeed.y < 50.0f) {
-				movementSpeed.y += wingThrust;
+				movementSpeed.y += wingThrust / 2;
 			}
 
 			flapWingsAnim.SetTrigger(flapBothHash);
@@ -236,11 +236,11 @@ public class ButterflyControlsv031 : MonoBehaviour {
 			movementSpeed.z = 0.0f;
 			movementSpeed.y = 0.0f;
 			is_Landed = true;
-			//			print ("is_Landed = " + is_Landed);
+			print (this.gameObject.name + " is_Landed = " + is_Landed);
 		} else {
 			if (is_Landed == true && terrainHeightPlaneLocale + 5 <= transform.position.y) {
 				is_Landed = false;
-				//				print ("is_Landed = " + is_Landed);
+				print (this.gameObject.name + " is_Landed = " + is_Landed);
 			}
 			if (terrainHeightPlaneLocale + 3 < transform.position.y) {
 				movementSpeed -= transform.InverseTransformDirection(Vector3.up) * gravity * Time.deltaTime;
@@ -250,10 +250,6 @@ public class ButterflyControlsv031 : MonoBehaviour {
 				}
 			}
 			rb.MovePosition(transform.position + (transform.up * movementSpeed.y * Time.fixedDeltaTime) + (transform.forward * movementSpeed.z * Time.fixedDeltaTime) + (transform.right * movementXSpeed * Time.fixedDeltaTime));
-
-//			transform.position += transform.up * movementSpeed.y * Time.deltaTime;
-//			transform.position += transform.forward * Time.deltaTime * movementSpeed.z;
-//			transform.position += transform.right * Time.deltaTime * movementXSpeed;
 
 			// Yaw based on how we're rolled.
 			float tip = (transform.right + Vector3.up).magnitude - 1.414214f;

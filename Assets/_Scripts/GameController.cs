@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Cinemachine;
 
 public class GameController: MonoBehaviour {
 
@@ -32,7 +33,7 @@ public class GameController: MonoBehaviour {
 	public Texture[] wings; 
 
 	// Respawn points
-	public List<Vector3> reSpawnPoints = new List<Vector3> {
+	List<Vector3> reSpawnPoints = new List<Vector3> {
 		new Vector3(4350, 200, 4350),
 		new Vector3(5650, 200, 4350),
 		new Vector3(5650, 200, 5650),
@@ -201,8 +202,8 @@ public class GameController: MonoBehaviour {
 
 			cameraClone.gameObject.name = newCameraName;
 
-			print (warningMsgName);
-			print (UICanvas.transform.GetChild (uiPlayers).transform.Find (warningMsgName).GetComponent<Text> ());
+//			print (warningMsgName);
+//			print (UICanvas.transform.GetChild (uiPlayers).transform.Find (warningMsgName).GetComponent<Text> ());
 			butterflyClone.GetComponent<ButterflyControlsv031> ().warningMsg = UICanvas.transform.GetChild(uiPlayers).transform.Find (warningMsgName).GetComponent<Text> ();
 
 			cameraClone.rect = getCameraRect (i);
@@ -212,6 +213,7 @@ public class GameController: MonoBehaviour {
 			Transform butterflyRwing = butterflyChild.transform.Find("R_wing");
 			Transform particleSystemL = butterflyLWing.transform.Find("wing_particles_L");
 			Transform particleSystemR = butterflyRwing.transform.Find("wing_particles_R");
+//			print ("Found butterfly parts. " + butterflyChild.name + " " + butterflyLWing.name + " " + butterflyRwing.name);
 
 			Color playerColor;
 
@@ -226,11 +228,21 @@ public class GameController: MonoBehaviour {
 			particleSystemL.GetComponent<ParticleSystem>().startColor = playerColor;
 			particleSystemR.GetComponent<ParticleSystem>().startColor = playerColor;
 
-			Transform cameraTracking = butterflyClone.transform.Find("CameraTracking");
 
-			cameraTracking.GetComponent<CameraTracking>().camera = cameraClone;
-			cameraTracking.GetComponent<CameraTracking>().butterfly = butterflyClone;
-			cameraTracking.GetComponent<CameraTracking>().enabled = true;
+			CinemachineVirtualCamera cmvc = cameraClone.GetComponentInChildren<CinemachineVirtualCamera> ();
+			cmvc.Follow = butterflyClone.transform;
+			cmvc.LookAt = butterflyClone.transform;
+			cmvc.gameObject.layer = 8 + i;
+
+			string cullingMaskName = "Player " + (i + 1);
+			cameraClone.cullingMask |= 1 << LayerMask.NameToLayer(cullingMaskName);
+
+
+//			Transform cameraTracking = butterflyClone.transform.Find("CameraTracking");
+//
+//			cameraTracking.GetComponent<CameraTracking>().camera = cameraClone;
+//			cameraTracking.GetComponent<CameraTracking>().butterfly = butterflyClone;
+//			cameraTracking.GetComponent<CameraTracking>().enabled = true;
 
 			spawnPoints.RemoveAt (randI);
 		}
