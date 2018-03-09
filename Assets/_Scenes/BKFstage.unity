@@ -8765,11 +8765,6 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 7a038ff211502481596e1d18e849e57e, type: 3}
   - {fileID: 2800000, guid: 94940afbb8f9247c2a2bf56d13b22248, type: 3}
   - {fileID: 2800000, guid: 62cd82f19199b4b92b2299d76c605240, type: 3}
-  reSpawnPoints:
-  - {x: 4350, y: 200, z: 4350}
-  - {x: 5650, y: 200, z: 4350}
-  - {x: 5650, y: 200, z: 5650}
-  - {x: 4350, y: 200, z: 5650}
   playerColors:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 0.8, b: 1, a: 1}

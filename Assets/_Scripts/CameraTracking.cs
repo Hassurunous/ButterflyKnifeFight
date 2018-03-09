@@ -13,7 +13,7 @@ public class CameraTracking : MonoBehaviour {
 	public float cameraFollowOffsetMin = 30.0f;
 	public GameObject butterfly;
 	public Camera camera;
-	
+
 	// Update is called once per frame
 	void Update () {
 		
