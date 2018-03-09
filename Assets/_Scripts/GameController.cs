@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Cinemachine;
 
 public class GameController: MonoBehaviour {
 
@@ -226,11 +227,16 @@ public class GameController: MonoBehaviour {
 			particleSystemL.GetComponent<ParticleSystem>().startColor = playerColor;
 			particleSystemR.GetComponent<ParticleSystem>().startColor = playerColor;
 
-			Transform cameraTracking = butterflyClone.transform.Find("CameraTracking");
+			CinemachineVirtualCamera cmvc = cameraClone.GetComponentInChildren<CinemachineVirtualCamera> ();
+			cmvc.Follow = butterflyClone;
+			cmvc.LookAt = butterflyClone;
 
-			cameraTracking.GetComponent<CameraTracking>().camera = cameraClone;
-			cameraTracking.GetComponent<CameraTracking>().butterfly = butterflyClone;
-			cameraTracking.GetComponent<CameraTracking>().enabled = true;
+
+//			Transform cameraTracking = butterflyClone.transform.Find("CameraTracking");
+//
+//			cameraTracking.GetComponent<CameraTracking>().camera = cameraClone;
+//			cameraTracking.GetComponent<CameraTracking>().butterfly = butterflyClone;
+//			cameraTracking.GetComponent<CameraTracking>().enabled = true;
 
 			spawnPoints.RemoveAt (randI);
 		}
