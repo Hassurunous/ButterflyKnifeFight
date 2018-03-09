@@ -20,18 +20,22 @@ public class GlobalController : MonoBehaviour {
 		DontDestroyOnLoad (gameObject);
 	}
 
-	public static void startGame() {
-		print ("Game Start!");
+	public static void StartGame() {
 		SceneManager.LoadScene ("BKFstage");
 	}
 
-	public static void mainMenu() {
-		print ("Main Menu");
+	public static void MainMenu() {
 		SceneManager.LoadScene ("Menu");
 	}
 
-	public void quitGame() {
-		print ("Quitting game...");
-		Application.Quit ();
+	public static void QuitGame()
+	{
+		#if UNITY_EDITOR
+		// Application.Quit() does not work in the editor so
+		// UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+		UnityEditor.EditorApplication.isPlaying = false;
+		#else
+		Application.Quit();
+		#endif
 	}
 }

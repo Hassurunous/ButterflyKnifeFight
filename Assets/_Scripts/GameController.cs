@@ -102,9 +102,9 @@ public class GameController: MonoBehaviour {
 		MainMenuButton = UICanvas.transform.Find ("Main Menu Button").gameObject;
 		PlayAgainButton = UICanvas.transform.Find ("Play Again Button").gameObject;
 		RestartGameButton = UICanvas.transform.Find ("Restart Button").gameObject;
-		MainMenuButton.GetComponent<Button> ().onClick.AddListener(() => GlobalController.mainMenu());
-		RestartGameButton.GetComponent<Button> ().onClick.AddListener(() => GlobalController.startGame());
-		PlayAgainButton.GetComponent<Button> ().onClick.AddListener(() => GlobalController.startGame());
+		MainMenuButton.GetComponent<Button> ().onClick.AddListener(() => GlobalController.MainMenu());
+		RestartGameButton.GetComponent<Button> ().onClick.AddListener(() => GlobalController.StartGame());
+		PlayAgainButton.GetComponent<Button> ().onClick.AddListener(() => GlobalController.StartGame());
 	}
 
 	// Set current state and last state change time
