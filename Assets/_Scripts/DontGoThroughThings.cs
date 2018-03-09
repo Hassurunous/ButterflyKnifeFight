@@ -46,6 +46,7 @@ public class DontGoThroughThings : MonoBehaviour
 					return;
 
 				if (!hitInfo.collider.isTrigger) {
+					print ("Detected imminent collision in next movement step. Collision with " + hitInfo.collider.name);
 					myRigidbody.position = hitInfo.point - (movementThisStep / movementMagnitude) * partialExtent; 
 					myRigidbody.GetComponent<ButterflyControlsv031> ().movementSpeed = new Vector3 (0.0f, 1.0f, 0.0f);
 				}

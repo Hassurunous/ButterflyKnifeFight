@@ -1470,7 +1470,7 @@ MonoBehaviour:
   sendTriggerMessage: 0
   layerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8192
   skinWidth: 1
 --- !u!114 &114513134657043068
 MonoBehaviour:
@@ -1507,13 +1507,6 @@ MonoBehaviour:
   movementXSpeed: 0
   movementYSpeed: 0
   movementZSpeed: 0
-  bias: 0.85
-  followDistance: 10
-  followHeight: 2
-  cameraVertOffsetMax: 10
-  cameraVertOffsetMin: 5
-  cameraFollowOffsetMax: 40
-  cameraFollowOffsetMin: 20
   killCount: 0
   killMsgActive: 0
   killTime: 0
