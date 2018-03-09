@@ -318,8 +318,8 @@ GameObject:
   - component: {fileID: 4056237725459034}
   - component: {fileID: 114532515807705638}
   - component: {fileID: 54619933146769076}
-  - component: {fileID: 114990135625169648}
-  - component: {fileID: 136980506220920306}
+  - component: {fileID: 136876941693144330}
+  - component: {fileID: 114373437312481892}
   m_Layer: 0
   m_Name: Butterflyv03
   m_TagString: ButterflyPrefab
@@ -398,7 +398,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1754785776394070}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5850.0186, y: 0.0000076293945, z: 4267.762}
+  m_LocalPosition: {x: 4750.503, y: 9.58, z: 4934.99}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4576217161717712}
@@ -1456,13 +1456,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f1c7c275e47e4c9b8eea939a9b5ad90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114373437312481892
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1754785776394070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a13331285dc98418296ea252802a52fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sendTriggerMessage: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  skinWidth: 1
 --- !u!114 &114513134657043068
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1013051752321592}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b6eaebaebce944118a369601eb705085, type: 3}
   m_Name: 
@@ -1522,22 +1538,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lastOwner: {fileID: 0}
   held: 1
---- !u!114 &114990135625169648
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1754785776394070}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a13331285dc98418296ea252802a52fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sendTriggerMessage: 0
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  skinWidth: 1
 --- !u!136 &136758773606008602
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -1564,7 +1564,7 @@ CapsuleCollider:
   m_Height: 0.4
   m_Direction: 1
   m_Center: {x: 0, y: -0.09031136, z: -0.007954498}
---- !u!136 &136980506220920306
+--- !u!136 &136876941693144330
 CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1573,10 +1573,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 3.38
-  m_Height: 9.15332
-  m_Direction: 2
-  m_Center: {x: 0, y: 2.56, z: -2.0766602}
+  m_Radius: 1.74646
+  m_Height: 3.49292
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 1.24646}
 --- !u!198 &198264216500317170
 ParticleSystem:
   m_ObjectHideFlags: 1
