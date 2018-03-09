@@ -15,6 +15,7 @@ public class PickKnife : MonoBehaviour {
 	}
 
 	void OnCollisionEnter (Collision target) {
+		print ("Picked up!");
 		if (target.gameObject.tag.Equals ("Butterfly") == true) {
 			Destroy (gameObject);
 			target.gameObject.transform.GetChild(0).gameObject.SetActive(true);

@@ -96,6 +96,7 @@ public class ButterflyCollision : MonoBehaviour {
 
 	void OnTriggerEnter(Collider target) {
 		print ("Butterfly collided with " + target.gameObject.name);
+		print ("Collision tag = " + target.gameObject.tag);
 		if (target.gameObject.tag.Equals ("BattleZone") == true) {
 			outCollision = false;
 			warningMsg.text = "";

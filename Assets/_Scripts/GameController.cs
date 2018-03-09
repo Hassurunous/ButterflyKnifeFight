@@ -134,17 +134,8 @@ public class GameController: MonoBehaviour {
 
 	// Get notification that player died from collision scripts
 	public void playerDied(GameObject deadButterfly, float deathTime) {
-//		print ("deathTime = " + deathTime);
 		deadButterflies.Add (deadButterfly);
-//		if (spawnTimes.Count == 0) {
-//			spawnTimes.Add(5);
-//		} else {
-//			spawnTimes.Add (spawnTimes[0] + spawnCounter);
-//		}
 		spawnTimes.Add (deathTime);
-//		for (int i = 0; i < spawnTimes.Count; i++) {
-//			print ("Spawn Times[ " + i + "] = " + spawnTimes[i]);
-//		}
 
 		butterflyDied = true;
 	}
@@ -257,10 +248,6 @@ public class GameController: MonoBehaviour {
 		PauseAndEndText.SetActive (true);
 		PlayAgainButton.SetActive (true);
 		MainMenuButton.SetActive (true);
-		print (MainMenuButton.name);
-		print (EndGameOverlay.name);
-		print (PauseAndEndText.name);
-		print (RestartGameButton.name);
 		int playerNum = System.Int32.Parse( winnerName[11] + "" );
 		switch (playerNum) {
 		case 1:
@@ -386,18 +373,12 @@ public class GameController: MonoBehaviour {
 					butterflyDied = false;
 				}
 				else if (Time.time >= spawnTimes[0] + 5) {
-//					Debug.Log (spawnTimes [0]);
-					// Reset butterflie values
+					// Reset butterfly values
 					Vector3 randomPos = reSpawnPoints [spawnPointer];
 					deadButterflies [0].transform.position = randomPos;
-					//print ("deadButterflies[0] = " + deadButterflies [0]);
 					deadButterflies [0].GetComponent<ButterflyControlsv031> ().movementSpeed = new Vector3(0.0f, 1.0f, 0.0f);
-//					deadButterflies [0].GetComponent<ButterflyControlsv031> ().movementXSpeed = 0;
-//					deadButterflies [0].GetComponent<ButterflyControlsv031> ().movementYSpeed = 0;
-//					deadButterflies [0].GetComponent<ButterflyControlsv031> ().movementZSpeed = 0;
 					// Respawn butterfly
 					deadButterflies [0].SetActive (true);
-//					deadButterflies [0].transform.GetChild(0).GetComponent<ButterflyControlsv031> ().warningMsg.text = "";
 					print(deadButterflies [0].transform.GetChild(0));
 					deadButterflies [0].transform.rotation = Quaternion.identity;
 					deadButterflies.RemoveAt (0);
@@ -408,7 +389,6 @@ public class GameController: MonoBehaviour {
 						spawnPointer = 0;
 					}
 				}
-//				spawnCounter += Time.deltaTime;
 			}
 			break;
 		case GameState.GameOver:
