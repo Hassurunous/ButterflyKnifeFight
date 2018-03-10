@@ -115,9 +115,7 @@ public class ButterflyControlsv031 : MonoBehaviour {
 
 
 			if (Input.GetButtonDown (pauseButton)) {
-				print ("Pause pressed");
 				gameController.gamePaused = !gameController.gamePaused;
-				print (gameController.gamePaused);
 			}
 				
 			if (killMsgActive) {
