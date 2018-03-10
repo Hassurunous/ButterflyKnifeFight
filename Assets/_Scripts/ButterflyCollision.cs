@@ -16,42 +16,30 @@ public class ButterflyCollision : MonoBehaviour {
 	public Text warningMsg;
 	private int UIPlayerNum = GlobalController.numberOfPlayers - 2;
 	private List<string> killMsgs = new List<string> { "Siiick!!", "Got 'eem", "Savage!", "Kill!", "Nailed it!", "Noice!" };
-	private GameObject parentPrefab;
 
 	void Start() {
-		parentPrefab = gameObject.transform.parent.gameObject;
-		parentPrefab.SetActive(true);
-//		print ("Finding the right parent to access. " + transform.parent.name);
-//		print ("Setting warning message. transform.parent.name.Length - 3 = " + transform.parent.name.Substring (transform.parent.name.Length - 3));
-		warningMsgName = "Warning" + transform.parent.name.Substring (transform.parent.name.Length - 3);
-//		print ("warningMsgName = " + warningMsgName);
+
+		warningMsgName = "Warning" + transform.name.Substring (transform.name.Length - 3);
 
 		UICanvas = GameObject.FindGameObjectWithTag("Overlay Canvas");
-//		print ("UICanvas = " + UICanvas);
+
 		switch (GlobalController.numberOfPlayers) {
 		case 2:
-//			print ("Find Warning Message = " + UICanvas.transform.GetChild (0).transform.Find (warningMsgName));
 			warningMsg = UICanvas.transform.GetChild (0).transform.Find (warningMsgName).GetComponent<Text> ();
-//			print ("warningMsg.name = " + warningMsg.name);
 			break;
 		case 3:
-//			print ("Find Warning Message = " + UICanvas.transform.GetChild (1).transform.Find (warningMsgName));
 			warningMsg = UICanvas.transform.GetChild(1).transform.Find (warningMsgName).GetComponent<Text> ();
-//			print ("warningMsg.name = " + warningMsg.name);
 			break;
 		case 4:
-//			print ("Find Warning Message = " + UICanvas.transform.GetChild (2).transform.Find (warningMsgName));
 			warningMsg = UICanvas.transform.GetChild(2).transform.Find (warningMsgName).GetComponent<Text> ();
-//			print ("warningMsg.name = " + warningMsg.name);
 			break;
 		}
 
 	}
 
 	void Update() {
-		if (airCollision == true || outCollision == true) {// || groundCollision == true) {
+		if (airCollision == true || outCollision == true) {
 			time -= Time.deltaTime;
-//			print ("Time remaining: " + time);
 
 			if (outCollision == true && time <= 5) { 
 				warningMsg.text = "Out of bounds! \n" + Mathf.CeilToInt (time);
@@ -61,9 +49,9 @@ public class ButterflyCollision : MonoBehaviour {
 
 			if (time <= 0) {
 				Vector3 spawnPosition = transform.position;
-				parentPrefab.SetActive (false);
+				gameObject.SetActive (false);
 				Instantiate (deathsplosion, spawnPosition, transform.rotation * Quaternion.Euler (0, 90, 0));
-				GameController.instance.playerDied (parentPrefab, Time.time);
+				GameController.instance.playerDied (gameObject, Time.time);
 
 				groundCollision = false;
 				airCollision = false;
@@ -90,24 +78,17 @@ public class ButterflyCollision : MonoBehaviour {
 			time = 7;
 			warningMsg.text = "";
 
-//			print("Back in Battle Zone");
 		}
 	}
 
 	void OnTriggerEnter(Collider target) {
-//		print ("Butterfly collided with " + target.gameObject.name);
-//		print ("Collision tag = " + target.gameObject.tag);
 		if (target.gameObject.tag.Equals ("BattleZone") == true) {
 			outCollision = false;
 			warningMsg.text = "";
 			text = false;
 			time = 7;
-
-
-//			print ("Back in bounds");
 		} 
 		else if (target.gameObject.tag.Equals ("AirZone") == true) {
-//			print ("Air collision");
 			if (airCollision == false) {
 				airCollision = true;
 				text = true;
@@ -118,67 +99,70 @@ public class ButterflyCollision : MonoBehaviour {
 				groundCollision = true;
 				text = true;
 			} 
-
-//			print ("Ground collision");
 		} 
 		else if (target.gameObject.tag.Equals ("Knife Handle") == true) {
+			print ("Butterfly collided with " + target.gameObject.name);
+			print ("Collision tag = " + target.gameObject.tag);
 			print ("Knife Handle");
-			foreach (Transform child in parentPrefab.transform) {
-				if (child.CompareTag ("Knife")) {
-					if (child.gameObject.activeSelf == false) {
-						if (target.gameObject.transform.parent.parent == null) {// check if the parent of the knife is a butterfly
-//							print ("Rekt!");
-							Destroy (target.gameObject.transform.parent.gameObject);
-						} else if (target.gameObject.transform.parent.parent.CompareTag ("ButterflyPrefab")) {
-//							print ("Stolen!");
-							target.gameObject.transform.parent.gameObject.SetActive (false);
+			GameObject lastOwner = target.gameObject.transform.parent.gameObject.GetComponent<knifeDecay> ().lastOwner;
+			if (lastOwner != gameObject) {
+				foreach (Transform child in gameObject.transform) {
+					if (child.CompareTag ("Knife")) {
+						if (child.gameObject.activeSelf == false) {
+							if (target.gameObject.transform.parent.parent == null) {// check if the parent of the knife is a butterfly
+								Destroy (target.gameObject.transform.parent.gameObject);
+							} else if (target.gameObject.transform.parent.parent.CompareTag ("ButterflyPrefab")) {
+								target.gameObject.transform.parent.gameObject.SetActive (false);
+							}
+							child.gameObject.SetActive (true);
 						}
-						child.gameObject.SetActive (true);
 					}
 				}
 			}
 		} else if (target.gameObject.tag.Equals ("Knife Blade") == true) {
+			print ("Butterfly collided with " + target.gameObject.name);
+			print ("Collision tag = " + target.gameObject.tag);
 			print ("Knife Blade");
-			Vector3 spawnPosition = transform.position;
-			parentPrefab.SetActive(false);
-			Instantiate(deathsplosion, spawnPosition, transform.rotation * Quaternion.Euler(0, 90, 0));
-			if (target.gameObject.transform.parent.gameObject.GetComponent<knifeDecay> ().lastOwner != null) { // check if the knife was thrown by another butterfly
-				Transform killer = target.gameObject.transform.parent.gameObject.GetComponent<knifeDecay> ().lastOwner.transform;
-				print (killer.name);
-				print (transform.name);
-				if (killer.name != parentPrefab.transform.name) {
+			GameObject lastOwner = target.gameObject.transform.parent.gameObject.GetComponent<knifeDecay> ().lastOwner;
+			if (lastOwner != gameObject) {
+				Vector3 spawnPosition = transform.position;
+				gameObject.SetActive (false);
+				Instantiate (deathsplosion, spawnPosition, transform.rotation * Quaternion.Euler (0, 90, 0));
+				if (target.gameObject.transform.parent.gameObject.GetComponent<knifeDecay> ().lastOwner != null) { // check if the knife was thrown by another butterfly
+					Transform killer = target.gameObject.transform.parent.gameObject.GetComponent<knifeDecay> ().lastOwner.transform;
+					if (killer.name != gameObject.transform.name) {
+						ButterflyControlsv031 killerScript = killer.GetComponent<ButterflyControlsv031> ();
+						killerScript.killCount += 1;
+						string killerMsgName = "Warning" + killer.name.Substring (killer.name.Length - 3);
+						string killerScoreName = "Kills" + killer.name.Substring (killer.name.Length - 3);
+						Text killerMsg = UICanvas.transform.GetChild (UIPlayerNum).transform.Find (killerMsgName).GetComponent<Text> ();
+						Text killerScore = UICanvas.transform.GetChild (UIPlayerNum).transform.Find (killerScoreName).GetComponent<Text> ();
+						killerMsg.text = killMsgs [Random.Range (0, killMsgs.Count)];
+						killerScore.text = killerScript.killCount + "/3";
+						killerScript.killMsgActive = true;
+						killerScript.killTime = Time.time;
+
+						GameController.instance.checkForGameEnd (killerScript.killCount, killer.name);
+					}
+				} else if (target.gameObject.transform.parent.parent != null) {// check if the parent of the knife is a butterfly
+					Transform killer = target.gameObject.transform.parent.parent;
 					ButterflyControlsv031 killerScript = killer.GetComponent<ButterflyControlsv031> ();
 					killerScript.killCount += 1;
 					string killerMsgName = "Warning" + killer.name.Substring (killer.name.Length - 3);
 					string killerScoreName = "Kills" + killer.name.Substring (killer.name.Length - 3);
-					Text killerMsg = UICanvas.transform.GetChild(UIPlayerNum).transform.Find (killerMsgName).GetComponent<Text> ();
-					Text killerScore = UICanvas.transform.GetChild(UIPlayerNum).transform.Find (killerScoreName).GetComponent<Text> ();
+					Text killerMsg = UICanvas.transform.GetChild (UIPlayerNum).transform.Find (killerMsgName).GetComponent<Text> ();
+					Text killerScore = UICanvas.transform.GetChild (UIPlayerNum).transform.Find (killerScoreName).GetComponent<Text> ();
 					killerMsg.text = killMsgs [Random.Range (0, killMsgs.Count)];
 					killerScore.text = killerScript.killCount + "/3";
 					killerScript.killMsgActive = true;
 					killerScript.killTime = Time.time;
 
 					GameController.instance.checkForGameEnd (killerScript.killCount, killer.name);
+
+					print ("Kill Count = " + target.gameObject.transform.parent.parent.GetComponent<ButterflyControlsv031> ().killCount);
 				}
-
-			} else if (target.gameObject.transform.parent.parent != null) {// check if the parent of the knife is a butterfly
-				Transform killer = target.gameObject.transform.parent.parent;
-				ButterflyControlsv031 killerScript = killer.GetComponent<ButterflyControlsv031> ();
-				killerScript.killCount += 1;
-				string killerMsgName = "Warning" + killer.name.Substring (killer.name.Length - 3);
-				string killerScoreName = "Kills" + killer.name.Substring (killer.name.Length - 3);
-				Text killerMsg = UICanvas.transform.GetChild(UIPlayerNum).transform.Find (killerMsgName).GetComponent<Text> ();
-				Text killerScore = UICanvas.transform.GetChild(UIPlayerNum).transform.Find (killerScoreName).GetComponent<Text> ();
-				killerMsg.text = killMsgs [Random.Range (0, killMsgs.Count)];
-				killerScore.text = killerScript.killCount + "/3";
-				killerScript.killMsgActive = true;
-				killerScript.killTime = Time.time;
-
-				GameController.instance.checkForGameEnd (killerScript.killCount, killer.name);
-
-				print ("Kill Count = " + target.gameObject.transform.parent.parent.GetComponent<ButterflyControlsv031> ().killCount);
+				GameController.instance.playerDied (gameObject, Time.time);
 			}
-			GameController.instance.playerDied (parentPrefab, Time.time);
 		}
 	}
 

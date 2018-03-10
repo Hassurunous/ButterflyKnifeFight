@@ -11,22 +11,6 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1754785776394070}
   m_IsPrefabParent: 1
---- !u!1 &1013051752321592
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4496103163164040}
-  - component: {fileID: 114513134657043068}
-  m_Layer: 0
-  m_Name: CameraTracking
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1033224372909772
 GameObject:
   m_ObjectHideFlags: 1
@@ -142,7 +126,6 @@ GameObject:
   - component: {fileID: 33668624132919432}
   - component: {fileID: 23568598340580976}
   - component: {fileID: 95053179690818716}
-  - component: {fileID: 114043437784450148}
   - component: {fileID: 136758773606008602}
   - component: {fileID: 65270706328395568}
   - component: {fileID: 65050594871660562}
@@ -320,6 +303,7 @@ GameObject:
   - component: {fileID: 54619933146769076}
   - component: {fileID: 136876941693144330}
   - component: {fileID: 114373437312481892}
+  - component: {fileID: 114481416558418670}
   m_Layer: 0
   m_Name: Butterflyv03
   m_TagString: ButterflyPrefab
@@ -401,9 +385,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
-  - {fileID: 4576217161717712}
-  - {fileID: 4496103163164040}
   - {fileID: 4644406625711406}
+  - {fileID: 4576217161717712}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -490,19 +473,6 @@ Transform:
   m_Father: {fileID: 4576217161717712}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4496103163164040
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1013051752321592}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4056237725459034}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4496682672412910
 Transform:
   m_ObjectHideFlags: 1
@@ -534,7 +504,7 @@ Transform:
   - {fileID: 4754033369206770}
   - {fileID: 4950651183639912}
   m_Father: {fileID: 4056237725459034}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4603516943665360
 Transform:
@@ -562,7 +532,7 @@ Transform:
   - {fileID: 4731441685284566}
   - {fileID: 4651140189535288}
   m_Father: {fileID: 4056237725459034}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!4 &4651140189535288
 Transform:
@@ -1425,26 +1395,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114043437784450148
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1290434866328674}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f352b28ccfb943bfbe3106fa9f4ea3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  time: 7
-  groundCollision: 0
-  airCollision: 0
-  outCollision: 0
-  deathsplosion: {fileID: 1547031203874596, guid: 4a871217bbf16457da31e36ed42dcc51,
-    type: 2}
-  text: 0
-  UICanvas: {fileID: 0}
-  warningMsg: {fileID: 0}
 --- !u!114 &114100661195344600
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1472,26 +1422,26 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8192
   skinWidth: 0.1
---- !u!114 &114513134657043068
+--- !u!114 &114481416558418670
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1013051752321592}
-  m_Enabled: 0
+  m_GameObject: {fileID: 1754785776394070}
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6eaebaebce944118a369601eb705085, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f352b28ccfb943bfbe3106fa9f4ea3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bias: 0.85
-  followDistance: 10
-  followHeight: 2
-  cameraVertOffsetMax: 5
-  cameraVertOffsetMin: 3
-  cameraFollowOffsetMax: 40
-  cameraFollowOffsetMin: 20
-  butterfly: {fileID: 0}
-  camera: {fileID: 0}
+  time: 7
+  groundCollision: 0
+  airCollision: 0
+  outCollision: 0
+  deathsplosion: {fileID: 1547031203874596, guid: 4a871217bbf16457da31e36ed42dcc51,
+    type: 2}
+  text: 0
+  UICanvas: {fileID: 0}
+  warningMsg: {fileID: 0}
 --- !u!114 &114532515807705638
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1504,6 +1454,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: {x: 0, y: 1, z: 0}
+  maxVelocities: {x: 0, y: 50, z: 400}
   movementXSpeed: 0
   movementYSpeed: 0
   movementZSpeed: 0
@@ -1518,6 +1469,7 @@ MonoBehaviour:
   flapRAxis: 
   bombsAwayAxis: 
   pauseButton: 
+  flapRotationStrength: 1.5
 --- !u!114 &114853184168682138
 MonoBehaviour:
   m_ObjectHideFlags: 1
