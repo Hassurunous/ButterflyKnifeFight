@@ -10,5 +10,8 @@ Hello and welcome to Butterfly Knife Fight! Currently this game is still in the 
     - Linux, Mac, and Windows versions available in Releases/Alpha 0.1
     - Currently supports local multiplayer up to 4 players
     - Split screen functionality.
-    - Controls are mapped as: Tap L/R to flap wings. Hold L/R to bank to either side. Press A to throw knife. Left stick to pitch and yaw.
-    
+    - Controls are mapped as:
+        - Tap L/R to flap wings.
+        - Hold L/R to bank to either side.
+        - Press A to throw knife.
+        - Left stick to pitch and yaw.
