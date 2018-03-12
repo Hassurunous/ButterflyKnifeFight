@@ -1,5 +1,7 @@
 # Butterfly Knife Fight
 
+Teaser Video: https://drive.google.com/file/d/0B7GeDSo_8xv1Vkd5WjIzeEFIRms/view
+
 Hello and welcome to Butterfly Knife Fight! Currently this game is still in the development stage, but we've decided to let people check it out, contribute, and play as we go through the development process. This way, we can get early feedback and pivot or change things before we get too invested in them.
 
 ## About Us
